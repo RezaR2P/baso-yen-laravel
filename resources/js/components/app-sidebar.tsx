@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import { LayoutGrid, Package, Tags } from "lucide-react";
+import { ChefHat, LayoutGrid, Package, Tags } from "lucide-react";
 import AppLogo from "@/components/app-logo";
 import { NavFooter } from "@/components/nav-footer";
 import { NavMain } from "@/components/nav-main";
@@ -31,6 +31,11 @@ const mainNavItems: NavItem[] = [
         title: "Produk",
         href: "/admin/products",
         icon: Package,
+    },
+    {
+        title: "Resep",
+        href: "/admin/recipes",
+        icon: ChefHat,
     },
 ];
 
