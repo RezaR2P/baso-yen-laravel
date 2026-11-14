@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RecipeController;
+use App\Http\Controllers\Admin\ArticleController;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -17,6 +18,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('products', ProductController::class)
             ->only(['index', 'store', 'update', 'destroy']);
         Route::resource('recipes', RecipeController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('articles', ArticleController::class)
             ->only(['index', 'store', 'update', 'destroy']);
     });
 });
