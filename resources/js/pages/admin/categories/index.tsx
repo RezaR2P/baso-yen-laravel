@@ -39,7 +39,7 @@ export default function CategoriesIndex({
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
-        const options = { preserveScroll: truimport { LayoutGrid, Tags } from 'lucide-react';e, onSuccess: reset };
+        const options = { preserveScroll: true, onSuccess: reset };
 
         if (editing) {
             form.put(`/admin/categories/${editing.id}`, options);
@@ -142,7 +142,7 @@ export default function CategoriesIndex({
 
                     {/* Formulir tambah / ubah */}
                     <Card className="h-fit">
-                        <CardHeader>import { LayoutGrid, Tags } from 'lucide-react';
+                        <CardHeader>
                             <CardTitle>
                                 {editing ? "Ubah Kategori" : "Tambah Kategori"}
                             </CardTitle>
@@ -167,14 +167,14 @@ export default function CategoriesIndex({
                                     <Label htmlFor="slug">
                                         Slug (kosongkan untuk otomatis)
                                     </Label>
-                                    <Inputimport { LayoutGrid, Tags } from 'lucide-react';
+                                    <Input
                                         id="slug"
                                         value={form.data.slug}
                                         onChange={(e) =>
-                                            import { LayoutGrid, Tags } from 'lucide-react';form.setData("slug", e.target.value)
+                                            form.setData("slug", e.target.value)
                                         }
                                     />
-                                    <InputErimport { LayoutGrid, Tags } from 'lucide-react';ror message={form.errors.slug} />
+                                    <InputError message={form.errors.slug} />
                                 </div>
                                 <div className="flex gap-2">
                                     <Button
