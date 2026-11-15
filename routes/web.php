@@ -10,10 +10,18 @@ use App\Http\Controllers\KontakController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
+
+use App\Http\Controllers\ProdukController;
+
+
 // Halaman publik
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::redirect('menu', '/produk', 301);
+Route::get('produk', [ProdukController::class, 'index'])->name('produk.index');
+Route::get('produk/{product:slug}', [ProdukController::class, 'show'])->name('produk.show');
 Route::post('kontak', [KontakController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('kontak.store');

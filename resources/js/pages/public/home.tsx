@@ -1,14 +1,6 @@
 import { Head, Link } from "@inertiajs/react";
-import { formatPrice } from "@/lib/format";
-
-type Product = {
-    id: number;
-    name: string;
-    slug: string;
-    description: string | null;
-    price: string | null;
-    image_url: string | null;
-};
+import ProductCard from "@/components/product-card";
+import type { Product } from "@/components/product-card";
 
 export default function Home({ featured }: { featured: Product[] }) {
     return (
@@ -29,10 +21,10 @@ export default function Home({ featured }: { featured: Product[] }) {
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
                         <Link
-                            href="/menu"
+                            href="/produk"
                             className="inline-flex min-h-12 items-center rounded-full bg-brand px-7 font-bold text-white hover:bg-brand/90"
                         >
-                            Lihat Menu
+                            Lihat Produk
                         </Link>
                         <Link
                             href="/kontak"
@@ -50,7 +42,7 @@ export default function Home({ featured }: { featured: Product[] }) {
                     <h2 className="text-2xl font-extrabold md:text-3xl">
                         Menu Pilihan
                     </h2>
-                    <Link href="/menu" className="font-bold text-brand">
+                    <Link href="/produk" className="font-bold text-brand">
                         Lihat semua →
                     </Link>
                 </div>
@@ -60,30 +52,7 @@ export default function Home({ featured }: { featured: Product[] }) {
                 ) : (
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                         {featured.map((product) => (
-                            <article
-                                key={product.id}
-                                className="overflow-hidden rounded-2xl border border-sand bg-white"
-                            >
-                                {product.image_url ? (
-                                    <img
-                                        src={product.image_url}
-                                        alt={product.name}
-                                        className="aspect-square w-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="flex aspect-square items-center justify-center bg-sand/40 text-sm text-cocoa/60">
-                                        Tanpa foto
-                                    </div>
-                                )}
-                                <div className="p-3">
-                                    <h3 className="font-bold">
-                                        {product.name}
-                                    </h3>
-                                    <p className="mt-1 font-semibold text-brand">
-                                        {formatPrice(product.price)}
-                                    </p>
-                                </div>
-                            </article>
+                            <ProductCard key={product.id} product={product} />
                         ))}
                     </div>
                 )}
