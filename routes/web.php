@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
@@ -10,7 +11,7 @@ use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman publik
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
 Route::post('kontak', [KontakController::class, 'store'])
@@ -20,7 +21,6 @@ Route::post('kontak', [KontakController::class, 'store'])
 // Halaman admin (wajib login)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
-
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class)
             ->only(['index', 'store', 'update', 'destroy']);

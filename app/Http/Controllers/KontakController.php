@@ -12,7 +12,7 @@ class KontakController extends Controller
 {
     public function create(): Response
     {
-        return Inertia::render('kontak');
+        return Inertia::render('public/kontak');
     }
 
     public function store(Request $request): RedirectResponse

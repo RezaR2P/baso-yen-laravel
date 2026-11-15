@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 import type { FormEvent } from "react";
 import InputError from "@/components/input-error";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const fieldClass =
-    "w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
+    "w-full rounded-md border border-input bg-white px-3 py-2 text-sm shadow-xs outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50";
 
 export default function Kontak() {
     const form = useForm({
@@ -28,32 +28,28 @@ export default function Kontak() {
     return (
         <>
             <Head title="Hubungi Kami" />
-            <div className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 p-6">
-                <Link
-                    href="/"
-                    className="text-sm text-muted-foreground hover:underline"
-                >
-                    ← Kembali ke beranda
-                </Link>
-                <div>
-                    <h1 className="text-3xl font-bold">Hubungi Kami</h1>
-                    <p className="text-muted-foreground">
-                        Kirim pertanyaan atau permintaan Anda, kami akan
-                        membalas lewat email.
-                    </p>
-                </div>
+            <div className="mx-auto max-w-xl px-5 py-12">
+                <h1 className="text-3xl font-extrabold">Hubungi Kami</h1>
+                <p className="mt-2 text-cocoa/70">
+                    Kirim pertanyaan atau permintaan Anda, kami akan membalas
+                    lewat email.
+                </p>
 
                 {form.recentlySuccessful && (
-                    <p className="rounded-md border border-green-600/30 bg-green-600/10 p-3 text-sm text-green-700 dark:text-green-400">
+                    <p
+                        role="status"
+                        className="mt-6 rounded-md border border-green-700/30 bg-green-100 p-3 text-sm text-green-800"
+                    >
                         Terima kasih! Pesan Anda sudah terkirim.
                     </p>
                 )}
 
-                <form onSubmit={submit} className="flex flex-col gap-4">
+                <form onSubmit={submit} className="mt-6 flex flex-col gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Nama</Label>
                         <Input
                             id="name"
+                            className="bg-white"
                             value={form.data.name}
                             onChange={(e) =>
                                 form.setData("name", e.target.value)
@@ -66,6 +62,7 @@ export default function Kontak() {
                         <Input
                             id="email"
                             type="email"
+                            className="bg-white"
                             value={form.data.email}
                             onChange={(e) =>
                                 form.setData("email", e.target.value)
@@ -77,6 +74,7 @@ export default function Kontak() {
                         <Label htmlFor="phone">No. telepon (opsional)</Label>
                         <Input
                             id="phone"
+                            className="bg-white"
                             value={form.data.phone}
                             onChange={(e) =>
                                 form.setData("phone", e.target.value)
@@ -88,6 +86,7 @@ export default function Kontak() {
                         <Label htmlFor="subject">Subjek</Label>
                         <Input
                             id="subject"
+                            className="bg-white"
                             value={form.data.subject}
                             onChange={(e) =>
                                 form.setData("subject", e.target.value)
@@ -111,7 +110,7 @@ export default function Kontak() {
                     <Button
                         type="submit"
                         disabled={form.processing}
-                        className="w-fit"
+                        className="w-fit rounded-full bg-brand px-8 text-white hover:bg-brand/90"
                     >
                         Kirim Pesan
                     </Button>
