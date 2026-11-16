@@ -7,16 +7,19 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\RecipeController;
 use App\Http\Controllers\KontakController;
-use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ResepController;
+
+
 
 
 // Halaman publik
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('menu', [MenuController::class, 'index'])->name('menu');
+Route::get('resep', [ResepController::class, 'index'])->name('resep.index');
+Route::get('resep/{recipe:slug}', [ResepController::class, 'show'])->name('resep.show');
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::redirect('menu', '/produk', 301);
