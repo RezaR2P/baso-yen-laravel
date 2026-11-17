@@ -8,6 +8,7 @@ const navItems = [
     { label: "Produk", href: "/produk" },
     { label: "Kontak", href: "/kontak" },
     { label: "Resep", href: "/resep" },
+    { label: "Artikel", href: "/artikel" },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ResepController;
-
+use App\Http\Controllers\ArtikelController;
 
 
 
@@ -20,6 +20,8 @@ use App\Http\Controllers\ResepController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('resep', [ResepController::class, 'index'])->name('resep.index');
 Route::get('resep/{recipe:slug}', [ResepController::class, 'show'])->name('resep.show');
+Route::get('artikel', [ArtikelController::class, 'index'])->name('artikel.index');
+Route::get('artikel/{article:slug}', [ArtikelController::class, 'show'])->name('artikel.show');
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::redirect('menu', '/produk', 301);
