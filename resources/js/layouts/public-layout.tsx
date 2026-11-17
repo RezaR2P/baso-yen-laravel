@@ -1,114 +1,155 @@
 import { Link, usePage } from "@inertiajs/react";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import type { ReactNode } from "react";
+import { useState, type PropsWithChildren } from "react";
 
-const navItems = [
-    { label: "Beranda", href: "/" },
+const nav = [
     { label: "Produk", href: "/produk" },
     { label: "Resep", href: "/resep" },
     { label: "Artikel", href: "/artikel" },
     { label: "Layanan", href: "/layanan" },
     { label: "Tentang Kami", href: "/tentang-kami" },
-    { label: "Kontak", href: "/kontak" },
 ];
 
-export default function PublicLayout({ children }: { children: ReactNode }) {
+export default function PublicLayout({ children }: PropsWithChildren) {
     const { url } = usePage();
     const [open, setOpen] = useState(false);
+    const path = url.split("?")[0];
 
     const isActive = (href: string) =>
-        href === "/" ? url === "/" : url.startsWith(href);
+        path === href || path.startsWith(href + "/");
 
     return (
-        <div className="flex min-h-screen flex-col bg-cream text-cocoa">
-            <header className="sticky top-0 z-40 border-b border-sand bg-cream/95 backdrop-blur">
-                <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3">
+        <div className="min-h-screen bg-cream font-sans text-cocoa">
+            <header className="border-b border-sand bg-cream">
+                <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-4 sm:px-8">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-xl font-extrabold"
+                        className="text-2xl font-extrabold tracking-tight"
                     >
-                        <span
-                            aria-hidden="true"
-                            className="size-8 rounded-lg bg-brand"
-                        />
                         Baso Yen
                     </Link>
 
-                    {/* Menu laptop */}
                     <nav
                         aria-label="Menu utama"
-                        className="hidden items-center gap-1 lg:flex"
+                        className="hidden items-center gap-8 font-semibold lg:flex"
                     >
-                        {navItems.map((item) => (
+                        {nav.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                                className={
                                     isActive(item.href)
-                                        ? "bg-brand text-white"
-                                        : "hover:bg-sand/60"
-                                }`}
+                                        ? "text-brand"
+                                        : "hover:text-brand"
+                                }
                             >
                                 {item.label}
                             </Link>
                         ))}
+                        <Link
+                            href="/kontak"
+                            className="rounded-full bg-brand px-6 py-2.5 font-bold text-white hover:bg-brand-dark"
+                        >
+                            Hubungi Kami
+                        </Link>
                     </nav>
 
-                    {/* Tombol hamburger HP dan tablet */}
                     <button
                         type="button"
-                        aria-label={open ? "Tutup menu" : "Buka menu"}
+                        aria-label="Buka menu"
                         aria-expanded={open}
-                        onClick={() => setOpen((v) => !v)}
+                        onClick={() => setOpen(!open)}
                         className="flex size-11 items-center justify-center rounded-xl border border-sand lg:hidden"
                     >
-                        {open ? (
-                            <X className="size-5" />
-                        ) : (
-                            <Menu className="size-5" />
-                        )}
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        >
+                            <path d="M4 7h16M4 12h16M4 17h16" />
+                        </svg>
                     </button>
                 </div>
 
-                {/* Panel menu HP dan tablet */}
                 {open && (
                     <nav
-                        aria-label="Menu utama"
-                        className="flex flex-col gap-1 border-t border-sand px-5 py-3 lg:hidden"
+                        aria-label="Menu seluler"
+                        className="flex flex-col gap-1 border-t border-sand px-4 pb-4 pt-2 lg:hidden"
                     >
-                        {navItems.map((item) => (
+                        {nav.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 onClick={() => setOpen(false)}
-                                className={`flex min-h-11 items-center rounded-xl px-4 font-semibold ${
+                                className={`flex min-h-12 items-center rounded-xl px-3 font-bold ${
                                     isActive(item.href)
-                                        ? "bg-brand text-white"
-                                        : "hover:bg-sand/60"
+                                        ? "bg-tan text-brand"
+                                        : ""
                                 }`}
                             >
                                 {item.label}
                             </Link>
                         ))}
+                        <Link
+                            href="/kontak"
+                            onClick={() => setOpen(false)}
+                            className="mt-2 flex min-h-12 items-center justify-center rounded-full bg-brand font-bold text-white"
+                        >
+                            Hubungi Kami
+                        </Link>
                     </nav>
                 )}
             </header>
 
-            <main className="flex-1">{children}</main>
+            <main>{children}</main>
 
             <footer className="bg-cocoa text-sand">
-                <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between">
-                    <p>
-                        © {new Date().getFullYear()} Baso Yen. Semua hak
-                        dilindungi.
-                    </p>
-                    <Link
-                        href="/login"
-                        className="underline-offset-4 hover:underline"
-                    >
-                        Masuk Admin
-                    </Link>
+                <div className="mx-auto grid max-w-[1280px] gap-10 px-4 py-14 sm:px-8 md:grid-cols-3">
+                    <div className="space-y-3">
+                        <p className="text-2xl font-extrabold text-cream">
+                            Baso Yen
+                        </p>
+                        <p className="max-w-xs text-sm leading-relaxed">
+                            [Tagline singkat Baso Yen]
+                        </p>
+                    </div>
+                    <div className="space-y-3">
+                        <p className="font-bold text-cream">Menu</p>
+                        <ul className="space-y-2 text-sm">
+                            {[...nav.slice(0, 4)].map((item) => (
+                                <li key={item.href}>
+                                    <Link
+                                        href={item.href}
+                                        className="hover:text-white"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="space-y-3">
+                        <p className="font-bold text-cream">Kontak</p>
+                        <ul className="space-y-2 text-sm">
+                            <li>[Alamat lengkap]</li>
+                            <li>[email@contoh.com]</li>
+                            <li>[No. telepon]</li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="border-t border-cocoa-line">
+                    <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-2 px-4 py-5 text-sm sm:px-8">
+                        <p>
+                            © {new Date().getFullYear()} Baso Yen. Hak cipta
+                            dilindungi.
+                        </p>
+                        <Link href="/login" className="hover:text-white">
+                            Masuk Admin
+                        </Link>
+                    </div>
                 </div>
             </footer>
         </div>
