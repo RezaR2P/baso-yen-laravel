@@ -23,6 +23,8 @@ Route::get('resep/{recipe:slug}', [ResepController::class, 'show'])->name('resep
 Route::get('artikel', [ArtikelController::class, 'index'])->name('artikel.index');
 Route::get('artikel/{article:slug}', [ArtikelController::class, 'show'])->name('artikel.show');
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
+Route::inertia('layanan', 'public/layanan')->name('layanan');
+Route::inertia('tentang-kami', 'public/tentang')->name('tentang');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::redirect('menu', '/produk', 301);
 Route::get('produk', [ProdukController::class, 'index'])->name('produk.index');

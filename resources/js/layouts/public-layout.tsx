@@ -6,9 +6,11 @@ import type { ReactNode } from "react";
 const navItems = [
     { label: "Beranda", href: "/" },
     { label: "Produk", href: "/produk" },
-    { label: "Kontak", href: "/kontak" },
     { label: "Resep", href: "/resep" },
     { label: "Artikel", href: "/artikel" },
+    { label: "Layanan", href: "/layanan" },
+    { label: "Tentang Kami", href: "/tentang-kami" },
+    { label: "Kontak", href: "/kontak" },
 ];
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
@@ -36,7 +38,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                     {/* Menu laptop */}
                     <nav
                         aria-label="Menu utama"
-                        className="hidden items-center gap-1 md:flex"
+                        className="hidden items-center gap-1 lg:flex"
                     >
                         {navItems.map((item) => (
                             <Link
@@ -53,13 +55,13 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                         ))}
                     </nav>
 
-                    {/* Tombol hamburger HP */}
+                    {/* Tombol hamburger HP dan tablet */}
                     <button
                         type="button"
                         aria-label={open ? "Tutup menu" : "Buka menu"}
                         aria-expanded={open}
                         onClick={() => setOpen((v) => !v)}
-                        className="flex size-11 items-center justify-center rounded-xl border border-sand md:hidden"
+                        className="flex size-11 items-center justify-center rounded-xl border border-sand lg:hidden"
                     >
                         {open ? (
                             <X className="size-5" />
@@ -69,11 +71,11 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
                     </button>
                 </div>
 
-                {/* Panel menu HP */}
+                {/* Panel menu HP dan tablet */}
                 {open && (
                     <nav
                         aria-label="Menu utama"
-                        className="flex flex-col gap-1 border-t border-sand px-5 py-3 md:hidden"
+                        className="flex flex-col gap-1 border-t border-sand px-5 py-3 lg:hidden"
                     >
                         {navItems.map((item) => (
                             <Link
