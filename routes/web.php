@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
 
@@ -35,7 +36,7 @@ Route::post('kontak', [KontakController::class, 'store'])
 
 // Halaman admin (wajib login)
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('categories', CategoryController::class)
             ->only(['index', 'store', 'update', 'destroy']);
@@ -45,7 +46,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->only(['index', 'store', 'update', 'destroy']);
         Route::resource('articles', ArticleController::class)
             ->only(['index', 'store', 'update', 'destroy']);
-
         Route::get('contacts', [ContactController::class, 'index'])->name('contacts.index');
         Route::post('contacts/{contact}/reply', [ContactController::class, 'reply'])->name('contacts.reply');
         Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
