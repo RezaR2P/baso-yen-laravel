@@ -1,85 +1,88 @@
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
+import Pagination from "@/components/pagination";
+import type { PageLink } from "@/components/pagination";
 import ProductCard from "@/components/product-card";
 import type { Product } from "@/components/product-card";
 
-type Category = {
-    id: number;
-    name: string;
-    slug: string;
-    products: Product[];
+type Category = { id: number; name: string; slug: string };
+
+type Props = {
+    categories: Category[];
+    products: { data: Product[]; links: PageLink[] };
+    activeCategory: string | null;
 };
+
+const pill =
+    "inline-flex min-h-11 items-center rounded-full px-5 text-sm font-bold";
 
 export default function ProdukIndex({
     categories,
-    others,
-}: {
-    categories: Category[];
-    others: Product[];
-}) {
-    const sections = [
-        ...categories
-            .filter((category) => category.products.length > 0)
-            .map((category) => ({
-                key: category.slug,
-                title: category.name,
-                products: category.products,
-            })),
-        ...(others.length > 0
-            ? [{ key: "lainnya", title: "Lainnya", products: others }]
-            : []),
-    ];
-
+    products,
+    activeCategory,
+}: Props) {
     return (
         <>
             <Head title="Produk" />
-            <div className="mx-auto max-w-6xl px-5 py-12">
-                <h1 className="text-3xl font-extrabold md:text-4xl">
+
+            <div className="mx-auto max-w-[1280px] px-4 py-10 sm:px-8 lg:py-14">
+                <nav aria-label="Jejak halaman" className="text-sm text-muted">
+                    <Link href="/" className="hover:text-brand">
+                        Beranda
+                    </Link>
+                    {" / "}
+                    <span className="text-cocoa">Produk</span>
+                </nav>
+
+                <h1 className="mt-4 text-4xl font-extrabold tracking-tight lg:text-[44px]">
                     Produk Kami
                 </h1>
-                <p className="mt-2 text-cocoa/70">Pilih menu favorit Anda.</p>
+                <p className="mt-2 max-w-2xl text-lg text-muted">
+                    Pilih produk favorit Anda dari berbagai kategori.
+                </p>
 
-                {sections.length > 1 && (
-                    <nav
-                        aria-label="Kategori produk"
-                        className="mt-6 flex flex-wrap gap-2"
+                <div
+                    className="mt-8 flex flex-wrap gap-2"
+                    role="group"
+                    aria-label="Filter kategori"
+                >
+                    <Link
+                        href="/produk"
+                        className={`${pill} ${
+                            !activeCategory
+                                ? "bg-brand text-white"
+                                : "border-[1.5px] border-sand bg-white hover:border-brand hover:text-brand"
+                        }`}
                     >
-                        {sections.map((section) => (
-                            <a
-                                key={section.key}
-                                href={`#${section.key}`}
-                                className="rounded-full border border-sand bg-white px-4 py-2 text-sm font-semibold hover:border-brand hover:text-brand"
-                            >
-                                {section.title}
-                            </a>
-                        ))}
-                    </nav>
-                )}
+                        Semua
+                    </Link>
+                    {categories.map((c) => (
+                        <Link
+                            key={c.id}
+                            href={`/produk?kategori=${c.slug}`}
+                            className={`${pill} ${
+                                activeCategory === c.slug
+                                    ? "bg-brand text-white"
+                                    : "border-[1.5px] border-sand bg-white hover:border-brand hover:text-brand"
+                            }`}
+                        >
+                            {c.name}
+                        </Link>
+                    ))}
+                </div>
 
-                {sections.length === 0 && (
-                    <p className="mt-10 text-cocoa/70">
-                        Produk akan segera hadir.
+                {products.data.length === 0 ? (
+                    <p className="mt-12 text-muted">
+                        Belum ada produk di kategori ini.
                     </p>
+                ) : (
+                    <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+                        {products.data.map((p) => (
+                            <ProductCard key={p.id} product={p} />
+                        ))}
+                    </div>
                 )}
 
-                {sections.map((section) => (
-                    <section
-                        key={section.key}
-                        id={section.key}
-                        className="mt-12 scroll-mt-24"
-                    >
-                        <h2 className="mb-4 text-2xl font-extrabold">
-                            {section.title}
-                        </h2>
-                        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                            {section.products.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                />
-                            ))}
-                        </div>
-                    </section>
-                ))}
+                <Pagination links={products.links} />
             </div>
         </>
     );
