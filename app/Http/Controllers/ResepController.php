@@ -11,10 +11,11 @@ class ResepController extends Controller
     public function index(): Response
     {
         return Inertia::render('public/resep/index', [
-            // 9 resep per halaman, dengan tombol Sebelumnya / Berikutnya.
+            // 9 resep per halaman (3 kolom x 3 baris), dengan nomor halaman.
             'recipes' => Recipe::where('is_active', true)
                 ->latest()
-                ->simplePaginate(9),
+                ->paginate(9)
+                ->withQueryString(),
         ]);
     }
 

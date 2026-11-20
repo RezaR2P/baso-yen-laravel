@@ -218,7 +218,9 @@ export default function Home({
                                 </h3>
                                 <p className="text-sm text-muted">
                                     {[
-                                        r.cook_time,
+                                        r.cook_time
+                                            ? `${r.cook_time} menit`
+                                            : null,
                                         r.servings
                                             ? `${r.servings} porsi`
                                             : null,
