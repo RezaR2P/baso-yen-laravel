@@ -26,7 +26,6 @@ Route::get('artikel/{article:slug}', [ArtikelController::class, 'show'])->name('
 Route::get('kontak', [KontakController::class, 'create'])->name('kontak');
 Route::inertia('layanan', 'public/layanan')->name('layanan');
 Route::inertia('tentang-kami', 'public/tentang')->name('tentang');
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::redirect('menu', '/produk', 301);
 Route::get('produk', [ProdukController::class, 'index'])->name('produk.index');
 Route::get('produk/{product:slug}', [ProdukController::class, 'show'])->name('produk.show');

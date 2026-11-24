@@ -1,55 +1,98 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Inertia\Response;
 
-class ProdukController extends Controller
+class ProductController extends Controller
 {
-    private const CARD_COLUMNS = ['id', 'name', 'slug', 'category_id', 'description', 'image_url'];
-
-    public function index(Request $request)
+    public function index(): Response
     {
-        $categories = ProductCategory::orderBy('name')->get(['id', 'name', 'slug']);
-
-        // Filter kategori lewat ?kategori=slug; slug yang tidak dikenal diabaikan.
-        $active = $categories->firstWhere('slug', $request->query('kategori'));
-
-        $products = Product::with('category:id,name')
-            ->where('is_active', true)
-            ->when($active, fn($q) => $q->where('category_id', $active->id))
-            ->orderByDesc('is_featured')
-            ->latest()
-            ->paginate(8, self::CARD_COLUMNS)
-            ->withQueryString();
-
-        return Inertia::render('public/produk/index', [
-            'categories' => $categories,
-            'products' => $products,
-            'activeCategory' => $active?->slug,
+        return Inertia::render('admin/products/index', [
+            'products' => Product::with('category:id,name')->latest()->get(),
+            'categories' => ProductCategory::orderBy('name')->get(['id', 'name']),
         ]);
     }
 
-    public function show(Product $product)
+    public function store(Request $request): RedirectResponse
     {
-        abort_unless($product->is_active, 404);
+        $data = $this->validated($request);
+        $data['image_url'] = $request->hasFile('image')
+            ? $this->saveImage($request->file('image'))
+            : null;
 
-        $product->load('category:id,name,slug');
+        Product::create(Arr::except($data, 'image'));
 
-        $related = Product::with('category:id,name')
-            ->where('is_active', true)
-            ->where('id', '!=', $product->id)
-            ->when($product->category_id, fn($q) => $q->where('category_id', $product->category_id))
-            ->latest()
-            ->take(4)
-            ->get(self::CARD_COLUMNS);
+        return back();
+    }
 
-        return Inertia::render('public/produk/show', [
-            'product' => $product,
-            'related' => $related,
+    public function update(Request $request, Product $product): RedirectResponse
+    {
+        $data = $this->validated($request, $product);
+
+        // Foto hanya diganti jika admin memilih file baru.
+        if ($request->hasFile('image')) {
+            $this->deleteImage($product->image_url);
+            $data['image_url'] = $this->saveImage($request->file('image'));
+        }
+
+        $product->update(Arr::except($data, 'image'));
+
+        return back();
+    }
+
+    public function destroy(Product $product): RedirectResponse
+    {
+        $this->deleteImage($product->image_url);
+        $product->delete();
+
+        return back();
+    }
+
+    private function validated(Request $request, ?Product $product = null): array
+    {
+        $request->merge([
+            'slug' => Str::slug($request->input('slug') ?: $request->input('name')),
         ]);
+
+        return $request->validate([
+            'name' => ['required', 'string', 'max:150'],
+            'slug' => [
+                'required',
+                'string',
+                'max:150',
+                Rule::unique('products', 'slug')->ignore($product?->id)
+            ],
+            'category_id' => ['nullable', 'exists:product_categories,id'],
+            'description' => ['nullable', 'string'],
+            'price' => ['nullable', 'numeric', 'min:0'],
+            'is_featured' => ['boolean'],
+            'is_active' => ['boolean'],
+            'image' => ['nullable', 'image', 'max:2048'], // maksimal 2 MB
+        ]);
+    }
+
+    private function saveImage(UploadedFile $file): string
+    {
+        return '/storage/' . $file->store('products', 'public');
+    }
+
+    private function deleteImage(?string $url): void
+    {
+        // Hanya hapus file yang diunggah lewat admin, bukan foto lama di public/.
+        if ($url && str_starts_with($url, '/storage/')) {
+            Storage::disk('public')->delete(Str::after($url, '/storage/'));
+        }
     }
 }
