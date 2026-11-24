@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import SafeImage from "@/components/safe-image";
+import Photo from "@/components/photo";
 import { formatDate } from "@/lib/format";
 
 export type ArticleSummary = {
@@ -16,26 +16,24 @@ export default function ArticleCard({ article }: { article: ArticleSummary }) {
     return (
         <Link
             href={`/artikel/${article.slug}`}
-            className="group block overflow-hidden rounded-2xl border border-sand bg-white transition hover:shadow-md"
+            className="group block space-y-3"
         >
-            <SafeImage
+            <Photo
                 src={article.image_url}
                 alt={article.title}
-                className="aspect-[16/10] w-full object-cover"
+                className="aspect-[16/10] w-full rounded-[20px]"
             />
-            <div className="p-4">
-                <p className="text-xs font-semibold text-cocoa/60">
+            <div className="space-y-1">
+                <p className="text-sm text-muted">
                     {[article.category, formatDate(article.published_at)]
                         .filter(Boolean)
                         .join(" · ")}
                 </p>
-                <h3 className="mt-1 font-bold group-hover:text-brand">
+                <h3 className="text-xl font-extrabold group-hover:text-brand">
                     {article.title}
                 </h3>
                 {article.summary && (
-                    <p className="mt-1 line-clamp-2 text-sm text-cocoa/70">
-                        {article.summary}
-                    </p>
+                    <p className="line-clamp-2 text-muted">{article.summary}</p>
                 )}
             </div>
         </Link>
